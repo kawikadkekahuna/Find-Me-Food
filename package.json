@@ -1,0 +1,24 @@
+{
+  "name": "find-me-food",
+  "version": "1.0.0",
+  "description": "Find-Me-Food",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kawikadkekahuna/Find-Me-Food.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kawikadkekahuna/Find-Me-Food/issues"
+  },
+  "homepage": "https://github.com/kawikadkekahuna/Find-Me-Food#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-connect": "^2.2.0",
+    "gulp-sass": "^2.0.4"
+  }
+}
