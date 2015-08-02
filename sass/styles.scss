@@ -1,3 +1,67 @@
+@import "partials/settings";
+@import "partials/foundation";
+
 $dark-color : #333333;
 
- html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+#map-canvas { 
+ 	height:500px;
+ 	width:500px; 
+ 	margin: 0; 
+ 	padding: 0;
+ }
+
+ body{
+ 	background-image: url('http://subtlepatterns.com/patterns/old_moon.png');
+ }
+
+.header-container{
+	.header{
+		background-color:orange;
+		p{
+			background-color:pink;
+			font-size:50px;
+			border:1px solid black;
+			text-align: center;
+			font-weight:800px;
+	    	text-shadow: 3px 3px 3px #000;
+		}
+	}
+}
+
+.landing-body{
+	background-color:red;
+
+	.landing-logo{
+		background-color:purple;
+	}
+	.landing-greeting{
+		background-color: yellow
+	}
+	.landing-form{
+		background-color:navy;
+	}
+	.landing-list{
+		background-color:white;
+	}
+	.landing-form-container{
+		background-color:green;
+	}
+	.landing-image{
+		background-image:url('https://placekitten.com/g/500/250');
+		height:250px;
+		width:500px;
+	}
+	.landing-submit{
+		border-radius:25px;
+		font-weight: 700;
+		height:50px;
+		background-color:brown;
+		&:hover{
+			background-color:yellow;
+		}
+	}
+	.landing-login-link{
+		display:inline-block;
+	}
+}
+
