@@ -47,9 +47,13 @@ $dark-color : #333333;
 		background-color:green;
 	}
 	.landing-image{
-		background-image:url('https://placekitten.com/g/500/250');
+		background-image:url('../assets/placeholder_landing.png');
 		height:250px;
 		width:500px;
+		&:hover{
+			background-image:url('../assets/placeholder_landing_hover.png');
+
+		}
 	}
 	.landing-submit{
 		border-radius:25px;

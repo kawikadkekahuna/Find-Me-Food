@@ -5,16 +5,27 @@
 
   </head>
   <body ng-app="App">
-
-
+    <div class="header-container">
+      <div class="header">
+        <div class="row">
+          <p>Find-Me-Food!</p>
+        </div>
+      </div>
+    </div>
   <div ng-view></div>
+  <div id="map-canvas"></div>
 
 	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.3/angular-route.min.js"></script> 
+  <script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=
+  AIzaSyApkgrrJDsE8R20rJBPWQd0hbUEx-j6an8">
+  </script>
   <script src="js/App.js"></script>
-  <script src="maps/basic-map.js"></script>
+  <script src="js/maps/basic-map.js"></script>
   </body>
 </html>
+
 
 
