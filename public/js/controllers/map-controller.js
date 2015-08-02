@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('App')
-	.controller('MapController',
-		[function(){
+	.controller('MapController',['$scope',function($scope){
 
-		}
-	]);
+	}
+])
