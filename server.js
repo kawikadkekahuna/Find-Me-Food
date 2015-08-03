@@ -55,32 +55,23 @@ app.route('/register')
 		var username = req.body.username;
 		var email = req.body.email;
 		var password = req.body.password;
-		available(username, email, password,createUser);
+
+		User.findOne({
+			username: username
+		}).then(function(response) {
+			if (response) {
+				console.log('not created')
+
+				res.status(200).send(false)
+			} else {
+				console.log('created')
+				createUser(username, email, password);
+				res.status(200).send(true);
+			}
+
+		});
 
 	});
-
-function available(username, email, password,callback) {
-
-	var available = true;
-
-	User.findOne({
-		username: username
-	}).then(function(res) {
-		console.log(res);
-		if (res) {
-			available = false;
-			res.status(200).send('User not available');
-		}else{
-			createUser(username,email,password);
-			res.status(200).send('User available');
-		}
-	});
-
-
-
-
-}
-
 
 function createUser(username, email, password) {
 

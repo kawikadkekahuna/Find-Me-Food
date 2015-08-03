@@ -6,6 +6,7 @@ angular.module('App')
 			email: 'john_doe@email.com'
 		}
 
+		$scope.userCreated;
 		$scope.registerUser = function(username,email,password){
 
 			console.log('email',email);
@@ -13,9 +14,15 @@ angular.module('App')
 				username:username,
 				email:email,
 				password:password
-			}).then(function(req){
-				console.log('req',req);
-			})
+			}).then(function(created){
+				// $scope.userCreated = created.data;
+				console.log('created.data',created.data);
+				if(created.data){
+					$scope.createdUser = 'Successfully created user';
+				}else{
+					$scope.createdUser = 'Username taken!  Please enter another username';
+				}
+			});
 		}
 
 	}]);

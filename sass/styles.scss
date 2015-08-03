@@ -7,8 +7,6 @@ $dark-color : #333333;
  	height:600px;
  	width:80%;
  	margin: 0 auto;
-//  	padding: 0;
-//  	border:1px solid black;
  }
 
  body{
@@ -70,3 +68,8 @@ $dark-color : #333333;
 	}
 }
 
+.user-registration-status{
+	color:red;
+	font-size:25px;
+	font-weight:800;
+}
