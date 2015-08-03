@@ -1,8 +1,19 @@
 angular.module('App')
-	.controller('RegistrationController', ['$scope', function($scope){
+	.controller('RegistrationController', ['$scope','$http', function($scope,$http){
 		$scope.registration = {
 			username: 'username',
-			password: 's',
+			password: 'password',
 			email: 'john_doe@email.com'
 		}
+
+		$scope.registerUser = function(username,email,password){
+
+			console.log('email',email);
+			$http.post('/register',{
+				username:username,
+				email:email,
+				password:password
+			});
+		}
+
 	}]);
