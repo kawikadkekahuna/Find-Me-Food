@@ -3,7 +3,8 @@ angular.module('App', ['ngRoute'])
 		
 		$routeProvider
 			.when('/', {
-				templateUrl: 'views/landing.html'
+				templateUrl: 'views/landing.html',
+				controller:'RegistrationController'
 			})
 			.when('/map',{
 				templateUrl: 'views/map.html',
