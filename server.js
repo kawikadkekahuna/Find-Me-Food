@@ -23,13 +23,13 @@ mongoose.connect('mongodb://localhost/find-me-food');
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function (callback) {
-  console.log('success!');
+db.once('open', function(callback) {
+	console.log('success!');
 });
-	
-var User = mongoose.model('Users',UserSchema);
 
-app.route('/login') 
+var User = mongoose.model('Users', UserSchema);
+
+app.route('/login')
 	.post(function(req, res, next) {
 		passport.authenticate('local', function(err, user, info) {
 			console.log('user', user);
@@ -51,22 +51,41 @@ app.route('/login')
 	});
 
 app.route('/register')
-	.post(function(req,res){
+	.post(function(req, res) {
 		var username = req.body.username;
 		var email = req.body.email;
 		var password = req.body.password;
-		console.log('username',username);
-		console.log('email',email);
-		console.log('password',password);
-		createUser(username,email,password);
+		available(username, email, password,createUser);
+
 	});
+
+function available(username, email, password,callback) {
+
+	var available = true;
+
+	User.findOne({
+		username: username
+	}).then(function(res) {
+		console.log(res);
+		if (res) {
+			available = false;
+			res.status(200).send('User not available');
+		}else{
+			createUser(username,email,password);
+			res.status(200).send('User available');
+		}
+	});
+
+
+
+
+}
+
 
 function createUser(username, email, password) {
 
 	var salt = bcrypt.genSaltSync(15);
 	var hash = bcrypt.hashSync(password, salt);
-	console.log('salt', salt);
-	console.log('hash', hash);
 	User.create({
 		username: username,
 		email: email,

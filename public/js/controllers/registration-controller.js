@@ -13,7 +13,9 @@ angular.module('App')
 				username:username,
 				email:email,
 				password:password
-			});
+			}).then(function(req){
+				console.log('req',req);
+			})
 		}
 
 	}]);
