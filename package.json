@@ -22,7 +22,11 @@
     "gulp-sass": "^2.0.4"
   },
   "dependencies": {
+    "body-parser": "^1.13.3",
     "express": "^4.13.2",
-    "foundation": "^4.2.1"
+    "express-session": "^1.11.3",
+    "foundation": "^4.2.1",
+    "passport": "^0.2.2",
+    "passport-local": "^1.0.0"
   }
 }
