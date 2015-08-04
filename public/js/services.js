@@ -10,22 +10,11 @@
   var directionsService = new google.maps.DirectionsService();
   var chosen = false;
 
-  function computeTotalDistance(result) {
-    var total = 0;
-    var myroute = result.routes[0];
-    for (var i = 0; i < myroute.legs.length; i++) {
-      total += myroute.legs[i].distance.value;
-    }
-    total = total / 1000.0;
-    return total + 'km';
-  }
-
   function calcRoute(pos, dest) {
-    console.log('dest',dest.name);
-    // dest = nextLocation.geometry.location || dest.geomeyr
+    dest = dest.geometry.location;
     var request = {
       origin : pos,
-      destination: dest.geometry.location,
+      destination: dest,
       travelMode : google.maps.DirectionsTravelMode.WALKING
     };
     directionsService.route(request, function(response, status) {
@@ -75,16 +64,6 @@
       map = new google.maps.Map(mapCanvasContainer, mapOptions);
       directionsDisplay.setMap(map);
       directionsDisplay.setPanel(directionsPanelContainer);
-
-      google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
-
-        var totalDistance = computeTotalDistance(directionsDisplay.getDirections());
-        // document.getElementById('total').innerHTML = totalDistance;
-
-      });
-
-
-
 
       // Try HTML5 geolocation
       if (navigator.geolocation) {
