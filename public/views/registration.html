@@ -1,0 +1,32 @@
+<form ng-controller="RegistrationController" name="RegistrationForm" class="landing-form">
+	<div class="user-registration-status">{{ createdUser }}</div>
+	<input name="username" type="text" ng-minlength="6" ng-model="registration.username" required>
+	<div role="alert">
+		<span class="error" ng-show="RegistrationForm.input.$error.required">
+			Required!
+		</span>
+	</div>
+
+	<input name="email" type="email" ng-model="registration.email" required>
+	<div role="alert">
+		<span class="error" ng-show="RegistrationForm.input.$error.email">
+			Required!
+		</span>
+	</div>
+
+	<input name="password" type="password" ng-model="registration.password" ng-minlength="6" ng-maxlength="15" required >
+	<div role="alert">
+		<span class="error" ng-show="RegistrationForm.password.$error.minlength">
+			Must be atleast 6 characters.
+		</span>
+		<span class="error" ng-show="RegistrationForm.password.$error.maxlength">
+			Must be less than 15 characters.
+		</span>					
+	</div>
+	<button type="submit" class="landing-submit" ng-disabled="RegistrationForm.$invalid"
+	ng-click="registerUser(registration.username,registration.email,registration.password)">Submit</button>	
+	<div class="login-container">
+		<a class="landing-login-link" ui-sref="login">Already have an account? Click here to sign in!</a>
+	</div>
+</form>
+	
