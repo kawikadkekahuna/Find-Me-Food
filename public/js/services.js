@@ -52,6 +52,23 @@
     }
   }
 
+  function handleNoGeolocation(errorFlag) {
+    if (errorFlag) {
+      var content = 'Error: The Geolocation service failed.';
+    } else {
+      var content = 'Error: Your browser doesn\'t support geolocation.';
+    }
+
+    var options = {
+      map: map,
+      position: new google.maps.LatLng(60, 105),
+      content: content
+    };
+
+    var infowindow = new google.maps.InfoWindow(options);
+    map.setCenter(options.position);
+  }
+
 
   function MapService() {
     var map;
@@ -74,53 +91,20 @@
           radius : '1000',
           keyword : 'restaurant'
         };
+        var mapPosition = { map : map,
+                    pos : pos
+                  };
 
-
-
-
-          service = new google.maps.places.PlacesService(map);
-          var mapPosition = { map : map,
-                        pos : pos
-                      };
-          service.nearbySearch(request, nearbySearchCompleted.bind(mapPosition));
-
-
-
-
-          map.setCenter(pos);
+        service = new google.maps.places.PlacesService(map);
+        service.nearbySearch(request, nearbySearchCompleted.bind(mapPosition));
+        map.setCenter(pos);
         }, function() {
           handleNoGeolocation(true);
         });
-
-
-
-
-
-
-
-
-
       } else {
         // Browser doesn't support Geolocation
         handleNoGeolocation(false);
       }
-    }
-
-    function handleNoGeolocation(errorFlag) {
-      if (errorFlag) {
-        var content = 'Error: The Geolocation service failed.';
-      } else {
-        var content = 'Error: Your browser doesn\'t support geolocation.';
-      }
-
-      var options = {
-        map: map,
-        position: new google.maps.LatLng(60, 105),
-        content: content
-      };
-
-      var infowindow = new google.maps.InfoWindow(options);
-      map.setCenter(options.position);
     }
   }
   //.service calls new on class passed in.
