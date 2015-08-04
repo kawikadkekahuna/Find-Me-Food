@@ -5,32 +5,65 @@
   var map;
   var service;
   var infowindow;
-  var pos;
+  var chosen = false;
+  var rendererOptions = {
+    draggable : true
+  };
+  var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
+  var directionsService = new google.maps.DirectionsService();
 
     this.init = function() {
       var mapOptions = {
-        zoom: 20
+        zoom: 17,
       };
       map = new google.maps.Map(document.getElementById('map-canvas'),
         mapOptions);
+      directionsDisplay.setMap(map);
+      directionsDisplay.setPanel(document.getElementById('directionsPanel'));
+
+      google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
+        computeTotalDistance(directionsDisplay.getDirections());
+      });
+
+    function calcRoute(pos, dest) {
+      console.log('dest',dest.name);
+      var request = {
+        origin : pos,
+        destination: dest.geometry.location,
+        travelMode : google.maps.DirectionsTravelMode.WALKING
+      };
+      directionsService.route(request, function(response, status) {
+        if(status === google.maps.DirectionsStatus.OK) {
+          directionsDisplay.setDirections(response);
+        }
+      });
+    }
+
+
 
       // Try HTML5 geolocation
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-          pos = new google.maps.LatLng(position.coords.latitude,
+         var pos = new google.maps.LatLng(position.coords.latitude,
             position.coords.longitude);
           var request = {
             location : pos,
-            radius : '500',
+            radius : '1000',
             keyword : 'restaurant'
           };
 
+
+          //creates a marker at result place
           function callback(results, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK) {
+            if (status == google.maps.places.PlacesServiceStatus.OK && !chosen) {
+
               var i = Math.floor(Math.random() * results.length + 0);
-                var place = results[i];
-                createMarker(place);
+               var dest = results[i];
+                createMarker(dest);
+              chosen = true;
             }
+          calcRoute(pos, dest);
+
           }
 
           service = new google.maps.places.PlacesService(map);
@@ -50,6 +83,16 @@
 
 
 
+
+        function computeTotalDistance(result) {
+          var total = 0;
+          var myroute = result.routes[0];
+          for (var i = 0; i < myroute.legs.length; i++) {
+            total += myroute.legs[i].distance.value;
+          }
+          total = total / 1000.0;
+          document.getElementById('total').innerHTML = total + ' km';
+        }
 
 
         function createMarker(place) {
