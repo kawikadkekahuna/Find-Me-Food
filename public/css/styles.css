@@ -3423,3 +3423,8 @@ body {
       background-color: yellow; }
   .landing-body .landing-login-link {
     display: inline-block; }
+
+.user-registration-status {
+  color: red;
+  font-size: 25px;
+  font-weight: 800; }
