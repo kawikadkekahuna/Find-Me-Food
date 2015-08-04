@@ -3379,7 +3379,7 @@ th.hide-for-touch {
     display: none !important; } }
 
 #map-canvas {
-  height: 500px;
+  height: 600px;
   width: 80%;
   margin: 0 auto; }
 
