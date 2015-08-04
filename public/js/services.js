@@ -1,5 +1,14 @@
 'use strict';
 (function() {
+   function computeTotalDistance(result) {
+      var total = 0;
+      var myroute = result.routes[0];
+      for (var i = 0; i < myroute.legs.length; i++) {
+        total += myroute.legs[i].distance.value;
+      }
+      total = total / 1000.0;
+      return total + 'km';
+    }
 
   function MapService() {
   var map;
@@ -22,14 +31,18 @@
       directionsDisplay.setPanel(document.getElementById('directionsPanel'));
 
       google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
-        computeTotalDistance(directionsDisplay.getDirections());
+
+        var totalDistance = computeTotalDistance(directionsDisplay.getDirections());
+        // document.getElementById('total').innerHTML = totalDistance;
+
       });
 
-    function calcRoute(pos, dest) {
+    function calcRoute(pos, dest, nextLocation) {
+      console.log('nextLocation',nextLocation);
       console.log('dest',dest.name);
       var request = {
         origin : pos,
-        destination: dest.geometry.location,
+        destination: nextLocation.geometry.location || dest.geometry.location,
         travelMode : google.maps.DirectionsTravelMode.WALKING
       };
       directionsService.route(request, function(response, status) {
@@ -55,14 +68,21 @@
 
           //creates a marker at result place
           function callback(results, status) {
-            if (status == google.maps.places.PlacesServiceStatus.OK && !chosen) {
+            var i = Math.floor(Math.random() * results.length + 0);
 
-              var i = Math.floor(Math.random() * results.length + 0);
+            if (status == google.maps.places.PlacesServiceStatus.OK && !chosen) {
+              $('#nextRestaurant').click(function() {
+                console.log('Going to next!');
+                var nextLocation = results[i];
+                calcRoute(pos, nextLocation);
+                return;
+              })
                var dest = results[i];
                 createMarker(dest);
               chosen = true;
+            calcRoute(pos, dest);
+
             }
-          calcRoute(pos, dest);
 
           }
 
@@ -84,15 +104,7 @@
 
 
 
-        function computeTotalDistance(result) {
-          var total = 0;
-          var myroute = result.routes[0];
-          for (var i = 0; i < myroute.legs.length; i++) {
-            total += myroute.legs[i].distance.value;
-          }
-          total = total / 1000.0;
-          document.getElementById('total').innerHTML = total + ' km';
-        }
+
 
 
         function createMarker(place) {

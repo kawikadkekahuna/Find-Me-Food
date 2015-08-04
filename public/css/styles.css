@@ -3380,10 +3380,8 @@ th.hide-for-touch {
 
 #map-canvas {
   height: 500px;
-  width: 500px;
-  margin: 0;
-  padding: 0;
-  border: 1px solid black; }
+  width: 80%;
+  margin: 0 auto; }
 
 body {
   background-image: url("http://subtlepatterns.com/patterns/old_moon.png"); }
