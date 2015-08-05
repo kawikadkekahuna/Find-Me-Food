@@ -3403,11 +3403,14 @@ body {
   .landing-body .landing-greeting {
     background-color: yellow; }
   .landing-body .landing-form {
-    background-color: navy; }
+    background-color: navy;
+    height: 350px;
+    padding-top: 35px; }
   .landing-body .landing-list {
     background-color: white; }
   .landing-body .landing-form-container {
-    background-color: green; }
+    background-color: green;
+    height: 350px; }
   .landing-body .landing-image {
     background-image: url("../assets/placeholder_landing.png");
     height: 250px;

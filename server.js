@@ -6,7 +6,10 @@ var passport = require('./middleware/passport-middleware');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var UserSchema = require('./models/users-schema.js');
+var path = require('path');
 
+app.set('views','./public/views');
+app.set('view engine','jade');
 // <--Middleware-->
 app.use(express.static('public'));
 app.use(session({
@@ -18,6 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: false
 }));
+
 //<--Middleware End-->
 mongoose.connect('mongodb://localhost/find-me-food');
 
@@ -72,6 +76,17 @@ app.route('/register')
 		});
 
 	});
+
+app.route('/map')
+	.get(function(req,res){
+		res.redirect('/#/map');
+	})
+
+app.use(function(req,res){
+	res.render('404');
+});
+
+
 
 function createUser(username, email, password) {
 

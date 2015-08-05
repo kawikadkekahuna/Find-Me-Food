@@ -1,6 +1,5 @@
 <form ng-controller="LoginController" name="LoginForm" class="landing-form">
-	<div class="user-login-status">{{ createdUser }}</div>
-	<h3>login</h3>
+
 	<input name="username" type="text" ng-minlength="6" ng-model="login.username" placeholder="username" required>
 	<div role="alert">
 		<span class="error" ng-show="LoginForm.input.$error.required">
@@ -17,6 +16,7 @@
 			Must be less than 15 characters.
 		</span>					
 	</div>
+	
 	<button type="submit" class="landing-submit" ng-disabled="LoginForm.$invalid"
 	ng-click="registerUser(login.username,login.password)">Submit</button>	
 	<div class="login-container">

@@ -1,7 +1,7 @@
 var App = angular.module('App', ['ui.router']);
 
-App.config(function($stateProvider,$urlRouterProvider){
-	$urlRouterProvider.otherwise('views/404.html');
+App.config(function($stateProvider,$urlRouterProvider,$locationProvider){
+	$urlRouterProvider.otherwise('404.html');
 	$stateProvider
 		.state('home', {
 			url:'/',
@@ -20,6 +20,8 @@ App.config(function($stateProvider,$urlRouterProvider){
 			templateUrl: 'views/map.html',
 			controller: 'MapController'
 		});
+
+ 	$locationProvider.html5Mode(true)
 });
 
 	// .config(['',function($stateProvider, $urlRouterProvider) {
@@ -37,3 +39,5 @@ App.config(function($stateProvider,$urlRouterProvider){
 	// 		});
 
 	// }]);
+
+
