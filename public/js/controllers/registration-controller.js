@@ -5,7 +5,7 @@ angular.module('App')
 			password: 'password',
 			email: 'john_doe@email.com'
 		}
-
+		
 		$scope.userCreated;
 		$scope.registerUser = function(username,email,password){
 

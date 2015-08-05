@@ -74,16 +74,27 @@ app.route('/register')
 		});
 
 	})
-	.get(function(req,res){
+	.get(function(req, res) {
 		res.redirect('/');
 	});
 
 app.route('/map')
-	.get(function(req,res){
+	.get(function(req, res) {
 		res.redirect('/#/map');
 	});
 
-app.use(function(req,res){
+app.route('/api/users/verify')
+	.get(function(req, res) {
+		var user = {
+			authenticated: req.isAuthenticated(),
+			user: req.user
+		}
+		res.json(user);
+	})
+
+
+
+app.use(function(req, res) {
 	res.redirect('/#/404');
 });
 

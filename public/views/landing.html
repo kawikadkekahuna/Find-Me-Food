@@ -30,7 +30,7 @@
 					</span>					
 				</div>
 				<button type="submit" class="landing-submit" ng-disabled="RegistrationForm.$invalid"
-				ng-click="registerUser(registration.username,registration.email,registration.password)">Submit</button>	
+				ng-click="registerUser(registration.username,registration.email,registration.password)">Register!</button>	
 				<div class="login-container">
 					<a class="landing-login-link" ui-sref=".login">Already have an account? Click here to sign in!</a>
 				</div>
@@ -38,7 +38,7 @@
 		</div>
 		</div>
 		<div class="large-8 columns landing-image">
-		<a ng-href="#map"> Link</a>
+		<a ui-sref="map"> Link</a>
 		</div>
 	</div>
 </div>
