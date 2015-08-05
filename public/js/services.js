@@ -6,15 +6,23 @@
   var mapOptions = {
     zoom: 17
   };
+
   var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
   var directionsService = new google.maps.DirectionsService();
-  var chosen = false;
 
-  function calcRoute(pos, dest) {
-    dest = dest.geometry.location;
+  //class to interact with google maps
+  function GoogleMaps(map) {
+    this.chosen = false;
+    this.map = map; //instance of google maps container
+    this.pos = null; //users current position
+    this.dest = null; //randomly selected destination restaurant
+  }
+
+  GoogleMaps.prototype.calcRoute = function() {
+    console.log('this.dest',this.dest);
     var request = {
-      origin : pos,
-      destination: dest,
+      origin : this.pos,
+      destination: this.dest.geometry.location,
       travelMode : google.maps.DirectionsTravelMode.WALKING
     };
     directionsService.route(request, function(response, status) {
@@ -28,14 +36,14 @@
   function nearbySearchCompleted(results, status) {
     var i = Math.floor(Math.random() * results.length + 0);
 
-    if (status == google.maps.places.PlacesServiceStatus.OK && !chosen) {
-      var dest = results[i];
-      chosen = true;
-      calcRoute(this.pos, dest);
+    if (status == google.maps.places.PlacesServiceStatus.OK && !this.chosen) {
+      this.dest = results[i];
+      this.chosen = true;
+      this.calcRoute();
     }
   }
 
-  function handleNoGeolocation(errorFlag) {
+  GoogleMaps.prototype.handleNoGeolocation = function(errorFlag) {
     if (errorFlag) {
       var content = 'Error: The Geolocation service failed.';
     } else {
@@ -43,7 +51,7 @@
     }
 
     var options = {
-      map: map,
+      map: this.map,
       position: new google.maps.LatLng(60, 105),
       content: content
     };
@@ -54,33 +62,31 @@
 
 
   function MapService() {
-    var map;
     var service;
-    var infowindow;
+    var googleMaps = null; //instance of GoogleMaps(map)
 
 
     this.init = function(mapCanvasContainer, directionsPanelContainer) {
 
-      map = new google.maps.Map(mapCanvasContainer, mapOptions);
+      var map = new google.maps.Map(mapCanvasContainer, mapOptions);
+      googleMaps = new GoogleMaps(map);
+
       directionsDisplay.setMap(map);
       directionsDisplay.setPanel(directionsPanelContainer);
 
       // Try HTML5 geolocation
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position, results, status) {
-        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        navigator.geolocation.getCurrentPosition(function(position) {
+        googleMaps.pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
         var request = {
-          location : pos,
+          location : googleMaps.pos,
           radius : '1000',
           keyword : 'restaurant'
         };
-        var mapPosition = { map : map,
-                    pos : pos
-                  };
 
         service = new google.maps.places.PlacesService(map);
-        service.nearbySearch(request, nearbySearchCompleted.bind(mapPosition));
-        map.setCenter(pos);
+        service.nearbySearch(request, nearbySearchCompleted.bind(googleMaps));
+        map.setCenter(googleMaps.pos);
         }, function() {
           handleNoGeolocation(true);
         });
