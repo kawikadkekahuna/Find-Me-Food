@@ -4,7 +4,7 @@
     draggable : true
   };
   var mapOptions = {
-    zoom: 17,
+    zoom: 17
   };
   var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
   var directionsService = new google.maps.DirectionsService();
@@ -24,29 +24,12 @@
     });
   }
 
-  function createMarker(place, map) {
-    var marker = new google.maps.Marker({
-      map: map,
-      position: place.geometry.location,
-      icon: {
-        // Star
-        path: 'M 0,-24 6,-7 24,-7 10,4 15,21 0,11 -15,21 -10,4 -24,-7 -6,-7 z',
-        fillColor: '#ffff00',
-        fillOpacity: 1,
-        scale: 1/4,
-        strokeColor: '#bd8d2c',
-        strokeWeight: 1
-      }
-    });
-  }
-
   //creates a marker at result place
   function nearbySearchCompleted(results, status) {
     var i = Math.floor(Math.random() * results.length + 0);
 
     if (status == google.maps.places.PlacesServiceStatus.OK && !chosen) {
       var dest = results[i];
-      createMarker(dest, this.map);
       chosen = true;
       calcRoute(this.pos, dest);
     }
