@@ -1,5 +1,5 @@
 <form ng-controller="LoginController" name="LoginForm" class="landing-form">
-
+	<div class="user-registration-status">{{ invalidLogin }}</div>
 	<input name="username" type="text" ng-minlength="6" ng-model="login.username" placeholder="username" required>
 	<div role="alert">
 		<span class="error" ng-show="LoginForm.input.$error.required">

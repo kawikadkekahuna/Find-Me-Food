@@ -26,6 +26,10 @@ App.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 			url: '/register',
 			templateUrl: 'views/landing.html'
 		})
+		.state('favorites', {
+			url: '/favorites',
+			templateUrl: 'views/favorites.html'
+		})
 		.state('map', {
 			url: '/map',
 			templateUrl: 'views/map.html',
@@ -42,8 +46,6 @@ App.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 
 App.run(function($rootScope,$location,$http){
 	$rootScope.$on('$stateChangeSuccess',function(event,next,current){
-		console.log('event',event);
-		console.log('next',next);
 		$http.get('/api/users/verify').then(function(res){
 			if(res.data.authenticated === true){
 				console.log('user authenticated');

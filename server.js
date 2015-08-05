@@ -6,7 +6,8 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
-var UserSchema = require('./models/users-schema.js');
+var User = require('./models/users-schema.js');
+var Favorites = require('./models/favorites-schema.js');
 var path = require('path');
 
 // <--Middleware-->
@@ -26,7 +27,6 @@ passport.use(new LocalStrategy(
 		User.findOne({
 			username: username
 		}, function(err, user) {
-			console.log('user',user);
 			if (err) {
 				return done(err);
 			}
@@ -58,10 +58,8 @@ db.once('open', function(callback) {
 	console.log('success!');
 });
 
-var User = mongoose.model('Users', UserSchema);
 
-
-app.route('/register')
+app.route('/api/users/register')
 	.post(function(req, res) {
 		var username = req.body.username;
 		var email = req.body.email;
@@ -71,12 +69,9 @@ app.route('/register')
 			username: username
 		}).then(function(response) {
 			if (response) {
-				console.log('not created')
-
 				res.status(200).send(false)
 			} else {
-				console.log('created')
-				createUser(username, email, password);
+				createUser(username,email,password);
 				res.status(200).send(true);
 			}
 
@@ -103,12 +98,22 @@ app.route('/api/users/verify')
 		res.json(user);
 	})
 
+app.route('/api/users/add-favorite')
+	.get(function(req,res){
 
-app.route('/login')
+	})
+	.post(function(req,res){
+
+	})
+app.route('/favorites')
+	.get(function(req,res){
+		res.redirect('/#/favorites')
+	})
+
+
+app.route('/api/users/login')
 	.post(function(req, res, next) {
 		passport.authenticate('local', function(err, user, info) {
-			console.log('user', user);
-			console.log('In---------------------------');
 			if (err) {
 				return next(err);
 			}
@@ -120,8 +125,11 @@ app.route('/login')
 				if (err) {
 					return next(err);
 				}
-				console.log('req.isAuthenticated()',req.isAuthenticated());
-				res.status(200).send(true);
+				var user = {
+					authenticated: req.isAuthenticated(),
+					user: req.user
+				}
+				res.status(200).send(user);
 
 			});
 		})(req, res, next);
@@ -135,8 +143,6 @@ app.use(function(req, res) {
 
 
 
-
-
 function createUser(username, email, password) {
 
 	var salt = bcrypt.genSaltSync(15);
@@ -147,5 +153,6 @@ function createUser(username, email, password) {
 		password: hash
 	});
 }
+
 
 app.listen(3000);
