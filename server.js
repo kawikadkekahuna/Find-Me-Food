@@ -7,7 +7,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var User = require('./models/users-schema.js');
-var Favorites = require('./models/favorites-schema.js');
+var Favorite = require('./models/favorites-schema.js');
 var path = require('path');
 
 // <--Middleware-->
@@ -100,9 +100,7 @@ app.route('/api/users/verify')
 			authenticated: req.isAuthenticated(),
 			user: req.user
 		}
-		console.log('user',user);
-
-		res.send(user);
+		res.json(user);
 	});
 
 app.route('/api/users/add-favorite')
@@ -110,7 +108,8 @@ app.route('/api/users/add-favorite')
 
 	})
 	.post(function(req,res){
-		console.log('req.body',req.body.location);
+		console.log('req.body.googleLocation',req.body);
+		addFavorite(req.body.favorites.id,req.body.favorites.googleLocation)
 		res.send('got it ');
 	});
 
@@ -163,6 +162,12 @@ function createUser(username, email, password) {
 	});
 }
 
-
+function addFavorite(id,location){
+	console.log('id',id);
+	Favorite.create({
+		user_id:id,
+		google_location:location
+	})
+}
 
 app.listen(3000);

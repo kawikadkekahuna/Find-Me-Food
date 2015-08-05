@@ -164,8 +164,11 @@
     }
 
     this.loaded = function(cb) {
-      console.log('googleMaps.dest  ');
       this.loadComplete = cb;
+    }
+    
+    this.getGoogleLocation = function() {
+      return googleMaps.dest;
     }
 
     this.getNextRestaurant = function() {
@@ -186,6 +189,3 @@
   angular.module('App')
     .service('MapService', MapService);
 })();
-    // this.getGoogleLocation = function() {
-    //   return googleMaps.dest;
-    // }
