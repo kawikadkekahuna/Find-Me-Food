@@ -15,8 +15,6 @@ angular.module('App')
 				email:email,
 				password:password
 			}).then(function(created){
-				// $scope.userCreated = created.data;
-				console.log('created.data',created.data);
 				if(created.data){
 					$scope.createdUser = 'Successfully created user';
 				}else{
