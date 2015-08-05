@@ -8,8 +8,6 @@ var mongoose = require('mongoose');
 var UserSchema = require('./models/users-schema.js');
 var path = require('path');
 
-app.set('views','./public/views');
-app.set('view engine','jade');
 // <--Middleware-->
 app.use(express.static('public'));
 app.use(session({
@@ -75,15 +73,18 @@ app.route('/register')
 
 		});
 
+	})
+	.get(function(req,res){
+		res.redirect('/');
 	});
 
 app.route('/map')
 	.get(function(req,res){
 		res.redirect('/#/map');
-	})
+	});
 
 app.use(function(req,res){
-	res.render('404');
+	res.redirect('/#/404');
 });
 
 

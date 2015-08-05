@@ -15,29 +15,29 @@ App.config(function($stateProvider,$urlRouterProvider,$locationProvider){
 				}
 			}
 		})
+		.state('home.register',{
+			views:{
+				'register':{
+					templateUrl:'views/register.html'
+				}
+			}
+		})
+		.state('register',{
+			url:'/register',
+			templateUrl: 'views/landing.html'
+		})
 		.state('map',{
 			url:'/map',
 			templateUrl: 'views/map.html',
 			controller: 'MapController'
+		})
+		.state('404',{
+			url:'/404',
+			templateUrl: 'views/404.html',
 		});
+
 
  	$locationProvider.html5Mode(true)
 });
-
-	// .config(['',function($stateProvider, $urlRouterProvider) {
-	// 	$urlRouterProvider.otherwise('views/404.html');
-	// 	$stateProvider
-	// 		.state('/home', {
-	// 			url:'/',
-	// 			templateUrl: 'views/landing.html',
-	// 			controller:'RegistrationController'
-	// 		})
-	// 		.state('/map',{
-	// 			url:'/map',
-	// 			templateUrl: 'views/map.html',
-	// 			controller: 'MapController'
-	// 		});
-
-	// }]);
 
 
