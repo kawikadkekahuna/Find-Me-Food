@@ -1,5 +1,4 @@
 <div ng-controller="MapController">
-
   <div id="map-canvas"></div>
   <input type="text" id="pac-input" class="controls" placeholder="Find me food in..." >
   <div id="directionsPanel" class="panel"></div>
@@ -7,8 +6,8 @@
     <h1>{{ restaurantName }}</h1>
   </div>
   <div class="nextRestaurant" ng-click="nextRestaurant()">Next Restaurant</div>
+	<div ng-controller="FavoritesController">
+  <Button ng-click="addFavorite()"></Button>
+	</div>
 </div>
 <div id="total"></div>
-
-
-
