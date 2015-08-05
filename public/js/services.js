@@ -4,28 +4,24 @@
     draggable : true
   };
   var mapOptions = {
-    zoom: 17,
+    zoom: 17
   };
+
   var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
   var directionsService = new google.maps.DirectionsService();
-  var chosen = false;
 
-  function computeTotalDistance(result) {
-    var total = 0;
-    var myroute = result.routes[0];
-    for (var i = 0; i < myroute.legs.length; i++) {
-      total += myroute.legs[i].distance.value;
-    }
-    total = total / 1000.0;
-    return total + 'km';
+  //class to interact with google maps
+  function GoogleMaps(map) {
+    this.chosen = false;
+    this.map = map; //instance of google maps container
+    this.pos = null; //users current position
+    this.dest = null; //randomly selected destination restaurant
   }
 
-  function calcRoute(pos, dest) {
-    console.log('dest',dest.name);
-    // dest = nextLocation.geometry.location || dest.geomeyr
+  GoogleMaps.prototype.calcRoute = function() {
     var request = {
-      origin : pos,
-      destination: dest.geometry.location,
+      origin : this.pos,
+      destination: this.dest.geometry.location,
       travelMode : google.maps.DirectionsTravelMode.WALKING
     };
     directionsService.route(request, function(response, status) {
@@ -35,114 +31,156 @@
     });
   }
 
-  function createMarker(place, map) {
-    var marker = new google.maps.Marker({
-      map: map,
-      position: place.geometry.location,
-      icon: {
-        // Star
-        path: 'M 0,-24 6,-7 24,-7 10,4 15,21 0,11 -15,21 -10,4 -24,-7 -6,-7 z',
-        fillColor: '#ffff00',
-        fillOpacity: 1,
-        scale: 1/4,
-        strokeColor: '#bd8d2c',
-        strokeWeight: 1
-      }
-    });
+  function nearbySearchCompleted(results, status) {
+    var i = Math.floor(Math.random() * results.length);
+
+    if (status == google.maps.places.PlacesServiceStatus.OK && !this.chosen) {
+      this.dest = results[i];
+      this.chosen = true;
+      this.calcRoute();
+    }
   }
 
-  //creates a marker at result place
-  function nearbySearchCompleted(results, status) {
-    var i = Math.floor(Math.random() * results.length + 0);
-
-    if (status == google.maps.places.PlacesServiceStatus.OK && !chosen) {
-      var dest = results[i];
-      createMarker(dest, this.map);
-      chosen = true;
-      calcRoute(this.pos, dest);
+  GoogleMaps.prototype.handleNoGeolocation = function(errorFlag) {
+    if (errorFlag) {
+      var content = 'Error: The Geolocation service failed.';
+    } else {
+      var content = 'Error: Your browser doesn\'t support geolocation.';
     }
+
+    var options = {
+      map: this.map,
+      position: new google.maps.LatLng(60, 105),
+      content: content
+    };
+
+    var infowindow = new google.maps.InfoWindow(options);
+    map.setCenter(options.position);
   }
 
 
   function MapService() {
-    var map;
     var service;
-    var infowindow;
-
+    var googleMaps = null; //instance of GoogleMaps(map)
+    this.loadComplete = null;
+    var self = this;
 
     this.init = function(mapCanvasContainer, directionsPanelContainer) {
-
-      map = new google.maps.Map(mapCanvasContainer, mapOptions);
+      var map = new google.maps.Map(mapCanvasContainer, mapOptions);
+      googleMaps = new GoogleMaps(map);
       directionsDisplay.setMap(map);
       directionsDisplay.setPanel(directionsPanelContainer);
+      service = new google.maps.places.PlacesService(map);
 
-      google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
 
-        var totalDistance = computeTotalDistance(directionsDisplay.getDirections());
-        // document.getElementById('total').innerHTML = totalDistance;
+      var input = /** @type {HTMLInputElement} */(
+        document.getElementById('pac-input'));
+      map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
+      var searchBox = new google.maps.places.SearchBox(
+      /** @type {HTMLInputElement} */(input));
+
+      // Listen for the event fired when the user selects an item from the
+      // pick list. Retrieve the matching places for that item.
+      google.maps.event.addListener(searchBox, 'places_changed', function() {
+        var places = searchBox.getPlaces();
+
+        if (places.length == 0) {
+          return;
+        }
+        // Try HTML5 geolocation
+        if (navigator.geolocation) {
+
+          googleMaps.pos = new google.maps.LatLng(places[0].geometry.location.G, places[0].geometry.location.K);
+          var request = {
+            location : googleMaps.pos,
+            radius : '1000',
+            keyword : 'restaurant'
+          };
+          googleMaps.chosen = false; //reset flag
+          service.nearbySearch(request, function(results, status) {
+
+            nearbySearchCompleted.call(googleMaps, results, status);
+
+            self.dest = googleMaps.dest;
+            if (self.loadComplete !== null) {
+              self.loadComplete();
+
+            }
+          });
+          map.setCenter(googleMaps.pos);
+
+        } else {
+          // Browser doesn't support Geolocation
+          handleNoGeolocation(false);
+        }
+        return;
       });
-
-
-
 
       // Try HTML5 geolocation
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position, results, status) {
-        var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        var request = {
-          location : pos,
-          radius : '1000',
-          keyword : 'restaurant'
-        };
+        navigator.geolocation.getCurrentPosition(function(position) {
+          googleMaps.pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          var request = {
+            location : googleMaps.pos,
+            radius : '1000',
+            keyword : 'restaurant'
+          };
 
+          service.nearbySearch(request, function(results, status) {
+            nearbySearchCompleted.call(googleMaps, results, status);
 
+            if (self.loadComplete !== null) {
+              self.loadComplete();
 
-
-          service = new google.maps.places.PlacesService(map);
-          var mapPosition = { map : map,
-                        pos : pos
-                      };
-          service.nearbySearch(request, nearbySearchCompleted.bind(mapPosition));
-
-
-
-
-          map.setCenter(pos);
+            }
+          });
+          map.setCenter(googleMaps.pos);
         }, function() {
           handleNoGeolocation(true);
         });
-
-
-
-
-
-
-
-
-
       } else {
         // Browser doesn't support Geolocation
         handleNoGeolocation(false);
       }
     }
 
-    function handleNoGeolocation(errorFlag) {
-      if (errorFlag) {
-        var content = 'Error: The Geolocation service failed.';
-      } else {
-        var content = 'Error: Your browser doesn\'t support geolocation.';
-      }
 
-      var options = {
-        map: map,
-        position: new google.maps.LatLng(60, 105),
-        content: content
-      };
 
-      var infowindow = new google.maps.InfoWindow(options);
-      map.setCenter(options.position);
+    this.getLocationName = function() {
+      return googleMaps.dest.name;
     }
+
+    this.loaded = function(cb) {
+      this.loadComplete = cb;
+    }
+
+    this.getNextRestaurant = function() {
+
+
+      // Try HTML5 geolocation
+      if (navigator.geolocation) {
+          var request = {
+            location : googleMaps.pos,
+            radius : '1000',
+            keyword : 'restaurant'
+          };
+          googleMaps.chosen = false; //resets flag
+          service.nearbySearch(request, function(results, status) {
+            nearbySearchCompleted.call(googleMaps, results, status);
+
+            if (self.loadComplete !== null) {
+              self.loadComplete();
+
+            }
+          });
+          googleMaps.map.setCenter(googleMaps.pos);
+      } else {
+        // Browser doesn't support Geolocation
+        handleNoGeolocation(false);
+      }
+    }
+
   }
   //.service calls new on class passed in.
   angular.module('App')
