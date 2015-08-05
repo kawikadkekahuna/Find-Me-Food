@@ -168,6 +168,10 @@
     }
     
     this.getGoogleLocation = function() {
+      console.log('LOCATION',googleMaps.dest);
+      console.log(googleMaps.pos);
+      googleMaps.dest[geometry][location] = googleMaps.pos;
+      console.log('googleMaps.dest',googleMaps.dest);
       return googleMaps.dest;
     }
 
@@ -176,13 +180,23 @@
       var i = Math.floor(Math.random() * restaurantArray.length);
 
       if (restaurantArray.length > 0) {
+        console.log('restaurantArray',restaurantArray);
         googleMaps.dest = restaurantArray.splice(i, 1)[0];
+        console.log('googleMaps.dest',googleMaps.dest);
         googleMaps.calcRoute();
         googleMaps.map.setCenter(googleMaps.pos);
 
       } else {
         googleMaps.handleNoRestaurants();
       }
+    }
+
+    this.randomizeFavoriteRestuarant = function(location){
+        var i = Math.floor(Math.random() * location.length);
+        googleMaps.dest = location.splice(i, 1)[0];
+        console.log('googleMaps.dest',googleMaps.dest);
+        googleMaps.calcRoute();
+        googleMaps.map.setCenter(googleMaps.pos);
     }
   }
   //.service calls new on class passed in.

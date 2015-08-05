@@ -39,7 +39,6 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
-	console.log('serialized');
 	done(null, user);
 });
 
@@ -110,12 +109,27 @@ app.route('/api/users/add-favorite')
 	.post(function(req,res){
 		console.log('req.body.googleLocation',req.body);
 		addFavorite(req.body.favorites.id,req.body.favorites.googleLocation)
-		res.send('got it ');
+		res.send('added to favorites');
 	});
 
 app.route('/favorites')
 	.get(function(req,res){
 		res.redirect('/#/favorites')
+	})
+
+app.route('/api/users/randomize-favorites')
+	.post(function(req,res){
+		Favorite.find({
+			user_id: req.body.id
+		}).then(function(user_favorites){
+			var favoriteLocations = [];
+			user_favorites.forEach(function(restaurant){
+				favoriteLocations.push(restaurant.google_location);
+			})
+			console.log('favoriteLocations',favoriteLocations);
+			res.send(favoriteLocations)
+
+		})
 	})
 
 

@@ -10,9 +10,7 @@ angular.module('App')
 				if (!res.data) {
 					$scope.invalidLogin = 'Credentials not in the system';
 				}else{
-					console.log(res.data);
 					sessionStorage.setItem('user_id', res.data.user._id);
-					console.log('session',sessionStorage.getItem('user_id'));
 				}
 
 			});
