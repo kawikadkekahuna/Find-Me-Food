@@ -12,9 +12,9 @@
 
   //class to interact with google maps
   function GoogleMaps(map) {
-    this.chosen = false;
     this.map = map; //instance of google maps container
     this.pos = null; //users current position
+    this.allResults = [];
     this.dest = null; //randomly selected destination restaurant
   }
 
@@ -34,9 +34,9 @@
   function nearbySearchCompleted(results, status) {
     var i = Math.floor(Math.random() * results.length);
 
-    if (status == google.maps.places.PlacesServiceStatus.OK && !this.chosen) {
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+      this.allResults = results;
       this.dest = results[i];
-      this.chosen = true;
       this.calcRoute();
     }
   }
@@ -58,6 +58,18 @@
     map.setCenter(options.position);
   }
 
+  GoogleMaps.prototype.handleNoRestaurants = function() {
+    var content = 'Sorry that is all the restaurants in your location';
+    var options = {
+      map : this.map,
+      position : this.pos,
+      content : content
+    }
+
+    var infowindow = new google.maps.InfoWindow(options);
+    this.map.setCenter(options.position);
+  }
+
 
   function MapService() {
     var service;
@@ -77,8 +89,8 @@
         document.getElementById('pac-input'));
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-      var searchBox = new google.maps.places.SearchBox(
-      /** @type {HTMLInputElement} */(input));
+      var searchBox = new google.maps.places.SearchBox(input);
+      searchBox.bindTo('bounds', map);
 
       // Listen for the event fired when the user selects an item from the
       // pick list. Retrieve the matching places for that item.
@@ -97,7 +109,6 @@
             radius : '1000',
             keyword : 'restaurant'
           };
-          googleMaps.chosen = false; //reset flag
           service.nearbySearch(request, function(results, status) {
 
             nearbySearchCompleted.call(googleMaps, results, status);
@@ -109,7 +120,6 @@
             }
           });
           map.setCenter(googleMaps.pos);
-
         } else {
           // Browser doesn't support Geolocation
           handleNoGeolocation(false);
@@ -150,37 +160,29 @@
     this.getLocationName = function() {
       return googleMaps.dest.name;
     }
+    this.getGoogleLocation = function() {
+      return googleMaps.dest;
+    }
 
     this.loaded = function(cb) {
       this.loadComplete = cb;
     }
 
     this.getNextRestaurant = function() {
+      var restaurantArray = googleMaps.allResults;
+      var i = Math.floor(Math.random() * restaurantArray.length);
 
+      if (restaurantArray.length > 0) {
+        googleMaps.dest = restaurantArray.splice(i, 1)[0];
+        googleMaps.calcRoute();
+        googleMaps.map.setCenter(googleMaps.pos);
 
-      // Try HTML5 geolocation
-      if (navigator.geolocation) {
-          var request = {
-            location : googleMaps.pos,
-            radius : '1000',
-            keyword : 'restaurant'
-          };
-          googleMaps.chosen = false; //resets flag
-          service.nearbySearch(request, function(results, status) {
-            nearbySearchCompleted.call(googleMaps, results, status);
-
-            if (self.loadComplete !== null) {
-              self.loadComplete();
-
-            }
-          });
-          googleMaps.map.setCenter(googleMaps.pos);
       } else {
-        // Browser doesn't support Geolocation
-        handleNoGeolocation(false);
+        googleMaps.handleNoRestaurants();
       }
-    }
 
+
+    }
   }
   //.service calls new on class passed in.
   angular.module('App')

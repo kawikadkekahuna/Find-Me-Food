@@ -9,11 +9,12 @@ angular.module('App')
       });
     });
     $scope.nextRestaurant = function() {
+
       MapService.getNextRestaurant();
+      $scope.restaurantName = "How about " + MapService.getLocationName() + "?";
+
     };
-    $scope.addFavorite = function(){
-      console.log('clicked');
-    }
+
 
 
 

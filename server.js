@@ -103,7 +103,8 @@ app.route('/api/users/add-favorite')
 
 	})
 	.post(function(req,res){
-
+		console.log('req.body',req.body.location);
+		res.send('got it ');
 	})
 app.route('/favorites')
 	.get(function(req,res){
@@ -153,6 +154,17 @@ function createUser(username, email, password) {
 		password: hash
 	});
 }
+
+function addFavorite(id,location) {
+
+	var salt = bcrypt.genSaltSync(15);
+	var hash = bcrypt.hashSync(password, salt);
+	Favorites.create({
+		user_id: id,
+		google_location: location
+	});
+}
+
 
 
 app.listen(3000);
