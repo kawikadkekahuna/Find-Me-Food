@@ -121,6 +121,7 @@
             }
           });
           map.setCenter(googleMaps.pos);
+
         } else {
           // Browser doesn't support Geolocation
           handleNoGeolocation(false);
@@ -161,9 +162,6 @@
     this.getLocationName = function() {
       return googleMaps.dest.name;
     }
-    this.getGoogleLocation = function() {
-      return googleMaps.dest;
-    }
 
     this.loaded = function(cb) {
       console.log('googleMaps.dest  ');
@@ -182,11 +180,12 @@
       } else {
         googleMaps.handleNoRestaurants();
       }
-
-
     }
   }
   //.service calls new on class passed in.
   angular.module('App')
     .service('MapService', MapService);
 })();
+    // this.getGoogleLocation = function() {
+    //   return googleMaps.dest;
+    // }

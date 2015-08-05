@@ -32,7 +32,8 @@ App.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		})
 		.state('map', {
 			url: '/map',
-			templateUrl: 'views/map.html'
+			templateUrl: 'views/map.html',
+			controller: 'MapController'
 		})
 		.state('404', {
 			url: '/404',
