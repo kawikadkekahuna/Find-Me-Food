@@ -3,17 +3,45 @@
 
 $dark-color : #333333;
 
-
-
  body{
-  height: 100%;
-  background-color: red;
- 	// background-image: url('http://subtlepatterns.com/patterns/old_moon.png');
+ 	background-image: url('https://c1.staticflickr.com/7/6035/7004735855_34df63e3b9_b.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
  }
+
+ #thisRestaurant {
+  h1 {
+    text-align: center;
+    color: black;
+  }
+
+}
+
+#map-canvas {
+  height:500px;
+  width:70%;
+  margin: 0 auto;
+ }
+
+.nextRestaurant {
+  height: 40px;
+  width: 30%;
+  background-color: rgba(255,255,255,.6);
+  border-radius: 5px;
+  line-height: 40px;
+  font-size: 1.6em;
+  font-weight: bolder;
+  text-align: center;
+  color: black;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 50px;
+}
 
 .header-container{
 	.header{
-		background-color:orange;
+		background-color:transparent;
 		p{
 			background-color:pink;
 			font-size:50px;
@@ -76,50 +104,44 @@ $dark-color : #333333;
 	font-weight:800;
 }
 
-
-
 .controls {
-  margin-top: 16px;
-  border: 1px solid transparent;
-  border-radius: 2px 0 0 2px;
-  box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  height: 32px;
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-}
+        margin-top: 16px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
 
-#pac-input {
-  background-color: #fff;
-  font-family: Roboto;
-  font-size: 15px;
-  font-weight: 300;
-  margin-left: 12px;
-  padding: 0 11px 0 13px;
-  text-overflow: ellipsis;
-  width: 400px;
-}
+      #pac-input {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
 
-#pac-input:focus {
-  border-color: #4d90fe;
-}
+      #pac-input:focus {
+        border-color: #4d90fe;
+      }
 
-.pac-container {
-  font-family: Roboto;
-}
+      .pac-container {
+        font-family: Roboto;
+      }
 
-#type-selector {
-  color: #fff;
-  background-color: #4d90fe;
-  padding: 5px 11px 0px 11px;
-}
+      #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+      }
 
-#type-selector label {
-  font-family: Roboto;
-  font-size: 13px;
-  font-weight: 300;
-}
-
-#map-canvas {
-  width: 100%;
-}
+      #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }

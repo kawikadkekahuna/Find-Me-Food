@@ -39,11 +39,16 @@ passport.use(new LocalStrategy(
 ));
 
 passport.serializeUser(function(user, done) {
+	console.log('serialized');
 	done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
-	done(null, user);
+passport.deserializeUser(function(id, done) {
+  User.findById(id).then(
+    function(user) {
+
+      done(null, {id : user._id});
+    });
 });
 
 app.use(passport.initialize());
@@ -95,8 +100,10 @@ app.route('/api/users/verify')
 			authenticated: req.isAuthenticated(),
 			user: req.user
 		}
-		res.json(user);
-	})
+		console.log('user',user);
+
+		res.send(user);
+	});
 
 app.route('/api/users/add-favorite')
 	.get(function(req,res){
@@ -105,7 +112,8 @@ app.route('/api/users/add-favorite')
 	.post(function(req,res){
 		console.log('req.body',req.body.location);
 		res.send('got it ');
-	})
+	});
+
 app.route('/favorites')
 	.get(function(req,res){
 		res.redirect('/#/favorites')
@@ -152,16 +160,6 @@ function createUser(username, email, password) {
 		username: username,
 		email: email,
 		password: hash
-	});
-}
-
-function addFavorite(id,location) {
-
-	var salt = bcrypt.genSaltSync(15);
-	var hash = bcrypt.hashSync(password, salt);
-	Favorites.create({
-		user_id: id,
-		google_location: location
 	});
 }
 

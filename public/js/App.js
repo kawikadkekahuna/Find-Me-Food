@@ -32,8 +32,7 @@ App.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
 		})
 		.state('map', {
 			url: '/map',
-			templateUrl: 'views/map.html',
-			controller: 'MapController'
+			templateUrl: 'views/map.html'
 		})
 		.state('404', {
 			url: '/404',
@@ -48,11 +47,11 @@ App.run(function($rootScope,$location,$http){
 	$rootScope.$on('$stateChangeSuccess',function(event,next,current){
 		$http.get('/api/users/verify').then(function(res){
 			if(res.data.authenticated === true){
-				console.log('user authenticated');
+				console.log('user_authenticated');
 			}else{
 				console.log('user not authenticated');
 			}
-		})		
+		})
 	})
 })
 
