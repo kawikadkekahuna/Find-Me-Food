@@ -9,8 +9,7 @@ angular.module('App')
 		$scope.userCreated;
 		$scope.registerUser = function(username,email,password){
 
-			console.log('email',email);
-			$http.post('/register',{
+			$http.post('/api/users/register',{
 				username:username,
 				email:email,
 				password:password
