@@ -24,7 +24,6 @@
       destination: this.dest.geometry.location,
       travelMode : google.maps.DirectionsTravelMode.WALKING
     };
-    console.log('request',request);
     directionsService.route(request, function(response, status) {
       if(status === google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
@@ -32,9 +31,7 @@
     });
   }
 
-  //creates a marker at result place
   function nearbySearchCompleted(results, status) {
-    console.log('nearbySearchCompletedresults', results);
     var i = Math.floor(Math.random() * results.length);
 
     if (status == google.maps.places.PlacesServiceStatus.OK && !this.chosen) {
@@ -73,6 +70,8 @@
       googleMaps = new GoogleMaps(map);
       directionsDisplay.setMap(map);
       directionsDisplay.setPanel(directionsPanelContainer);
+      service = new google.maps.places.PlacesService(map);
+
 
       var input = /** @type {HTMLInputElement} */(
         document.getElementById('pac-input'));
@@ -89,12 +88,8 @@
         if (places.length == 0) {
           return;
         }
-        console.log('navigator.geolocation',navigator.geolocation);
         // Try HTML5 geolocation
         if (navigator.geolocation) {
-        console.log('in geoloaction');
-
-          navigator.geolocation.getCurrentPosition(function(position) {
 
           googleMaps.pos = new google.maps.LatLng(places[0].geometry.location.G, places[0].geometry.location.K);
           var request = {
@@ -103,9 +98,7 @@
             keyword : 'restaurant'
           };
           googleMaps.chosen = false; //reset flag
-          // service = new google.maps.places.PlacesService(map);
           service.nearbySearch(request, function(results, status) {
-          console.log('im in geolocation')
 
             nearbySearchCompleted.call(googleMaps, results, status);
 
@@ -116,9 +109,7 @@
             }
           });
           map.setCenter(googleMaps.pos);
-          }, function() {
-            handleNoGeolocation(true);
-          });
+
         } else {
           // Browser doesn't support Geolocation
           handleNoGeolocation(false);
@@ -136,7 +127,6 @@
             keyword : 'restaurant'
           };
 
-          service = new google.maps.places.PlacesService(map);
           service.nearbySearch(request, function(results, status) {
             nearbySearchCompleted.call(googleMaps, results, status);
 
@@ -165,36 +155,26 @@
       this.loadComplete = cb;
     }
 
-    this.getNextRestaurant = function(mapCanvasContainer, directionsPanelContainer) {
-      var map = new google.maps.Map(mapCanvasContainer, mapOptions);
-      googleMaps = new GoogleMaps(map);
+    this.getNextRestaurant = function() {
 
-      directionsDisplay.setMap(map);
-      directionsDisplay.setPanel(directionsPanelContainer);
 
       // Try HTML5 geolocation
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-        googleMaps.pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-        var request = {
-          location : googleMaps.pos,
-          radius : '1000',
-          keyword : 'restaurant'
-        };
+          var request = {
+            location : googleMaps.pos,
+            radius : '1000',
+            keyword : 'restaurant'
+          };
+          googleMaps.chosen = false; //resets flag
+          service.nearbySearch(request, function(results, status) {
+            nearbySearchCompleted.call(googleMaps, results, status);
 
-        service = new google.maps.places.PlacesService(map);
-        service.nearbySearch(request, function(results, status) {
-          nearbySearchCompleted.call(googleMaps, results, status);
+            if (self.loadComplete !== null) {
+              self.loadComplete();
 
-          if (self.loadComplete !== null) {
-            self.loadComplete();
-
-          }
-        });
-        map.setCenter(googleMaps.pos);
-        }, function() {
-          handleNoGeolocation(true);
-        });
+            }
+          });
+          googleMaps.map.setCenter(googleMaps.pos);
       } else {
         // Browser doesn't support Geolocation
         handleNoGeolocation(false);
