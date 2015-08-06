@@ -193,6 +193,7 @@
       var randomLocation = location.splice(i, 1)[0];
       console.log('randomLocation',randomLocation); 
       var pos =  new google.maps.LatLng(randomLocation.geometry.location.G, randomLocation.geometry.location.K);
+        googleMaps.dest = randomLocation;
         googleMaps.dest.geometry.location = pos;
         googleMaps.calcRoute();
         googleMaps.map.setCenter(googleMaps.pos);

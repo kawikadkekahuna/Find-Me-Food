@@ -33,8 +33,8 @@ angular.module('App')
                 MapService.randomizeFavoriteRestuarant(favoriteLocations.data);
                 
             }).then(function(){
-                
-                $scope.restaurantName = "How about " + MapService.getLocationName() + "?";
+                var name = MapService.getLocationName();
+                updateName(name)
             })
 
         }
