@@ -177,7 +177,6 @@ function createUser(username, email, password) {
 }
 
 function addFavorite(id,location){
-	console.log('id',id);
 	Favorite.create({
 		user_id:id,
 		google_location:location

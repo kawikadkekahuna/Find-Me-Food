@@ -1,11 +1,11 @@
 'use strict';
 (function() {
   var rendererOptions = {
-    draggable : true
+    draggable: true
   };
   var mapOptions = {
     zoom: 17,
-    disableDefaultUI : true
+    disableDefaultUI: true
   };
 
   var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
@@ -21,12 +21,13 @@
 
   GoogleMaps.prototype.calcRoute = function() {
     var request = {
-      origin : this.pos,
+      origin: this.pos,
       destination: this.dest.geometry.location,
-      travelMode : google.maps.DirectionsTravelMode.WALKING
+      travelMode: google.maps.DirectionsTravelMode.WALKING
     };
+
     directionsService.route(request, function(response, status) {
-      if(status === google.maps.DirectionsStatus.OK) {
+      if (status === google.maps.DirectionsStatus.OK) {
         directionsDisplay.setDirections(response);
       }
     });
@@ -62,9 +63,9 @@
   GoogleMaps.prototype.handleNoRestaurants = function() {
     var content = 'Sorry that is all the restaurants in your location';
     var options = {
-      map : this.map,
-      position : this.pos,
-      content : content
+      map: this.map,
+      position: this.pos,
+      content: content
     }
 
     var infowindow = new google.maps.InfoWindow(options);
@@ -86,7 +87,7 @@
       service = new google.maps.places.PlacesService(map);
 
 
-      var input = /** @type {HTMLInputElement} */(
+      var input = /** @type {HTMLInputElement} */ (
         document.getElementById('pac-input'));
       map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
@@ -106,9 +107,9 @@
 
           googleMaps.pos = new google.maps.LatLng(places[0].geometry.location.G, places[0].geometry.location.K);
           var request = {
-            location : googleMaps.pos,
-            radius : '1000',
-            keyword : 'restaurant'
+            location: googleMaps.pos,
+            radius: '1000',
+            keyword: 'restaurant'
           };
           service.nearbySearch(request, function(results, status) {
 
@@ -134,9 +135,9 @@
         navigator.geolocation.getCurrentPosition(function(position) {
           googleMaps.pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
           var request = {
-            location : googleMaps.pos,
-            radius : '1000',
-            keyword : 'restaurant'
+            location: googleMaps.pos,
+            radius: '1000',
+            keyword: 'restaurant'
           };
 
           service.nearbySearch(request, function(results, status) {
@@ -166,10 +167,8 @@
     this.loaded = function(cb) {
       this.loadComplete = cb;
     }
-    
+
     this.getGoogleLocation = function() {
-      console.log('location',googleMaps.pos)
-      console.log('destination',googleMaps.dest);
       return googleMaps.dest;
     }
 
@@ -187,12 +186,20 @@
       }
     }
 
-    this.randomizeFavoriteRestuarant = function(location){
-        var i = Math.floor(Math.random() * location.length);
-        googleMaps.dest = location.splice(i, 1)[0];
-        console.log('googleMaps.dest',googleMaps.dest);
+    this.randomizeFavoriteRestuarant = function(location) {
+      var i = Math.floor(Math.random() * location.length);
+
+      if (location.length > 0) {
+      var randomLocation = location.splice(i, 1)[0];
+      console.log('randomLocation',randomLocation); 
+      var pos =  new google.maps.LatLng(randomLocation.geometry.location.G, randomLocation.geometry.location.K);
+        googleMaps.dest.geometry.location = pos;
         googleMaps.calcRoute();
         googleMaps.map.setCenter(googleMaps.pos);
+
+      } else {
+        googleMaps.handleNoRestaurants();
+      }
     }
   }
   //.service calls new on class passed in.

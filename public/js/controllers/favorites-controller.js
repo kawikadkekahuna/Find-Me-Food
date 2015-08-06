@@ -13,6 +13,7 @@ angular.module('App')
                     id: sessionStorage.getItem('user_id'),
                     googleLocation: MapService.getGoogleLocation()
                 }
+                console.log('favorites',favorites);
 
                 $http.post('/api/users/add-favorite', {
                     favorites: favorites
@@ -29,7 +30,11 @@ angular.module('App')
                 id: sessionStorage.getItem('user_id')
             }).then(function(favoriteLocations){
                 console.log('favoriteLocations.data',favoriteLocations.data);
-                MapService.randomizeFavoriteRestuarant(favoriteLocations.data)
+                MapService.randomizeFavoriteRestuarant(favoriteLocations.data);
+                
+            }).then(function(){
+                
+                $scope.restaurantName = "How about " + MapService.getLocationName() + "?";
             })
 
         }
