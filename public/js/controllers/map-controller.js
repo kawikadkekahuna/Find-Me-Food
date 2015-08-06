@@ -10,5 +10,7 @@ angular.module('App')
     });
     $scope.nextRestaurant = function(){
       MapService.getNextRestaurant(angular.element('#map-canvas').get(0), angular.element('#directionsPanel').get(0));
-    }
+    };
+
+
 	}]);
