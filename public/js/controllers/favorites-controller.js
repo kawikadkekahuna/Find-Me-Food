@@ -7,6 +7,8 @@ angular.module('App')
                 if (!res.data.authenticated) {
                     return;
                 }
+                var googleLocation = MapService.getGoogleLocation();
+                console.log('googleLocation',googleLocation);
                 var favorites = {
                     id: sessionStorage.getItem('user_id'),
                     googleLocation: MapService.getGoogleLocation()
