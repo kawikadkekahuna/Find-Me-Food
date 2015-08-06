@@ -1,10 +1,17 @@
 <input type="text" id="pac-input" class="controls" placeholder="Find me food in..." >
-<div id="map-canvas"></div>
-<div id="directionsPanel" class="panel"></div>
 <div id="thisRestaurant">
   <h1>{{ restaurantName }}</h1>
 </div>
-<div class="nextRestaurant" ng-click="nextRestaurant()">Next Restaurant</div>
+
+
+
+
+<div id="mapContainer" class="row">
+  <div id="map-canvas" class="small-9 large-9 columns"></div>
+  <div id="directionsPanel" class="panel small-3 large-3 columns"></div>
+</div>
+
+<div class="nextRestaurant" ng-click="nextRestaurant()">No thanks, show me another!</div>
 
 
 

@@ -3378,16 +3378,37 @@ th.hide-for-touch {
   .show-for-print {
     display: none !important; } }
 
+body {
+  background-image: url("https://c1.staticflickr.com/7/6035/7004735855_34df63e3b9_b.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative; }
+
+#thisRestaurant h1 {
+  text-align: center;
+  color: black; }
+
 #map-canvas {
-  height: 600px;
-  width: 80%;
+  height: 500px;
+  width: 70%;
   margin: 0 auto; }
 
-body {
-  background-image: url("http://subtlepatterns.com/patterns/old_moon.png"); }
+.nextRestaurant {
+  height: 40px;
+  width: 30%;
+  background-color: rgba(255, 255, 255, 0.6);
+  border-radius: 5px;
+  line-height: 40px;
+  font-size: 1.6em;
+  font-weight: bolder;
+  text-align: center;
+  color: black;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 50px; }
 
 .header-container .header {
-  background-color: orange; }
+  background-color: transparent; }
   .header-container .header p {
     background-color: pink;
     font-size: 50px;

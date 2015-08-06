@@ -4,7 +4,8 @@
     draggable : true
   };
   var mapOptions = {
-    zoom: 17
+    zoom: 17,
+    disableDefaultUI : true
   };
 
   var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
@@ -163,6 +164,7 @@
     }
 
     this.loaded = function(cb) {
+      console.log('googleMaps.dest  ');
       this.loadComplete = cb;
     }
 
