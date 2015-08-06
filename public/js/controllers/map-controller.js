@@ -8,8 +8,11 @@ angular.module('App')
         $scope.restaurantName = "How about " + MapService.getLocationName() + "?";
       });
     });
+
     $scope.nextRestaurant = function(){
       MapService.getNextRestaurant();
+      $scope.restaurantName = "How about " + MapService.getLocationName() + "?";
+
     };
 
 
